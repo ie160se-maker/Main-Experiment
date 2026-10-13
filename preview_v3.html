@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本実験 刺激プレビュー（6セル）</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { display: block; background: #f2f2f2; padding: 16px; }
+  h1 { font-size: 18px; margin: 0 0 6px; }
+  p.note { font-size: 13px; color: #555; margin: 0 0 16px; line-height: 1.6; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 18px; }
+  .cell { background: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 10px; }
+  .cell h2 { font-size: 14px; margin: 0 0 4px; }
+  .cell .meta { font-size: 12px; color: #666; margin-bottom: 6px; }
+  .cell a { font-size: 12px; }
+  .cell .instagram-post { width: 100%; margin: 6px 0 0; }
+</style>
+</head>
+<body>
+  <h1>本実験 刺激プレビュー（KIORI・6セル）</h1>
+  <p class="note">各セルの投稿を確認する画面です（データは保存しません）。「このセルで通しテスト」は <code>?test=1&amp;cell=N</code> で本番カウンタも本番保存も使わずに最後まで回答でき、完了画面に保存されるはずのデータが表示されます。</p>
+  <div class="grid" id="grid"></div>
+
+  <script src="carousel_instrumented.js"></script>
+  <script src="stimuli_v3.js"></script>
+  <script src="assignment_table.js"></script>
+  <script src="assignment_v3.js"></script>
+  <script>
+    (function () {
+      const grid = document.getElementById('grid');
+      const names = { A: 'A 公益のみ', B: 'B 曖昧公言', C: 'C 明確公言' };
+      for (let cell = 0; cell < 6; cell++) {
+        const d = Assignment.decode(cell);
+        const box = document.createElement('div');
+        box.className = 'cell';
+        box.innerHTML = '<h2>cell ' + cell + '：いいね ' + (d.likesLevel === 'low' ? '低' : '高') + ' × ' + names[d.disclosure] + '</h2>' +
+          '<div class="meta">表示：' + d.likesText + '／4枚目：KIORI4-' + d.disclosure.toLowerCase() + '.png</div>' +
+          '<a href="index.html?test=1&cell=' + cell + '" target="_blank">このセルで通しテスト →</a><div class="stage"></div>';
+        grid.appendChild(box);
+        Stimuli.mountStimulus(box.querySelector('.stage'), d.disclosure.toLowerCase(), d.likesText, {});
+      }
+      // 割当表の確認（先頭3ブロックとセル別の出現回数）
+      const t = window.ASSIGNMENT_TABLE.cells, counts = [0, 0, 0, 0, 0, 0];
+      t.forEach(function (c) { counts[c]++; });
+      const info = document.createElement('p');
+      info.className = 'note';
+      info.textContent = '割当表：' + t.length + '行（シード ' + window.ASSIGNMENT_TABLE.seed + '）、先頭18行 = ' + t.slice(0, 18).join(' ') + '、セル別の出現回数 = ' + counts.join(' / ');
+      document.body.insertBefore(info, grid);
+    })();
+  </script>
+</body>
+</html>
