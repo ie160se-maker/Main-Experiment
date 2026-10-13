@@ -17,7 +17,7 @@
   'use strict';
 
   // ★本実験用の新しい DataPipe 実験ID（Google Drive 連携で新規作成したもの）に差し替える
-  const EXPERIMENT_ID = 'REPLACE_WITH_NEW_EXPERIMENT_ID';
+  const EXPERIMENT_ID = '7QtMpn2gd2NS';
   const CONDITION_URL = 'https://pipe.jspsych.org/api/condition/';
 
   const TABLE = (global.ASSIGNMENT_TABLE && global.ASSIGNMENT_TABLE.cells) || [0, 1, 2, 3, 4, 5];
