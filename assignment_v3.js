@@ -31,6 +31,10 @@
 
   const params = new URLSearchParams(global.location.search);
   const TEST_MODE = params.get('test') === '1';
+   
+  // ★一時的：?multi=1 で同一端末からの複数回答を許可（開くたびに保存済みの割当を消し、新しいIDで始める）
+  const MULTI_MODE = params.get('multi') === '1';
+  if (MULTI_MODE) { try { global.localStorage.removeItem(STORE_KEY); } catch (e) { /* 継続 */ } }
 
   /* ---------- ブラウザ内保存（失敗しても動作は続ける） ---------- */
   function loadSaved() {
@@ -52,7 +56,7 @@
     }
     const pid = params.get('pid');
     if (pid && /^[A-Za-z0-9_-]{3,64}$/.test(pid)) return pid;
-    return (TEST_MODE ? 'test-' : 'm-') + randomID(10);
+    return (TEST_MODE ? 'test-' : (MULTI_MODE ? 'multi-' : 'm-')) + randomID(10);
   }
   function randomID(n) {
     const chars = '0123456789abcdefghjklmnopqrstuvwxyz';
@@ -142,5 +146,6 @@
   global.Assignment = {
     getParticipantId, getStatus, assignCondition, markCompleted, decode,
     EXPERIMENT_ID, TEST_MODE, USE_TABLE, TABLE_LEN, TABLE_SEED: (global.ASSIGNMENT_TABLE || {}).seed,
+    EXPERIMENT_ID, TEST_MODE, MULTI_MODE, USE_TABLE, TABLE_LEN, TABLE_SEED: (global.ASSIGNMENT_TABLE || {}).seed,
   };
 })(window);
