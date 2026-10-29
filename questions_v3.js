@@ -176,7 +176,7 @@
     /* ---- デモグラフィック（プレテストと同じ） ---- */
     demographics: [
       { id: 'gender', type: 'mc', text: '性別を教えてください。', options: ['男性', '女性', 'その他', '回答しない'] },
-      { id: 'occupation', type: 'mc', text: '現在の主な立場を教えてください。', options: ['学生', '被雇用', 'その他'] },
+      { id: 'occupation', type: 'mc', text: '現在の主な立場を教えてください。', options: ['学生', '社会人', 'その他'] },
     ],
   };
 
